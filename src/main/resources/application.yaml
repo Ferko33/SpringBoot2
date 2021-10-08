@@ -29,3 +29,11 @@ spring:
           log-slow-sql: true
         wall:
           enabled: true
+mybatis:
+  #configuration 与 config-location 不能同时存在
+  # configuration 相当于修改 mybatis 全局配置文件中的值
+  #config-location: classpath:/mybatis/mybatis_config.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  # 我们可以不写xml全局配置文件，直接使用 configuration：

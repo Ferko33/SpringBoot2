@@ -1,20 +1,48 @@
 package com.ferko.boot.controller;
 
+import com.ferko.boot.bean.Account;
+import com.ferko.boot.bean.City;
 import com.ferko.boot.bean.User;
+import com.ferko.boot.service.AccountService;
+import com.ferko.boot.service.CityService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
 public class indexController {
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private CityService cityService;
+
+    @PostMapping("/addCity")
+    @ResponseBody
+    public City addCity(City city){
+        cityService.addCity(city);
+        return city;
+    }
+
+    @GetMapping("/city")
+    @ResponseBody
+    public City getCityById(@RequestParam("cid") Long id){
+        log.info("id是：{}",id);
+        return cityService.getCityById(id);
+    }
+
+    @GetMapping("/acct/{id}")
+    @ResponseBody
+    public Account getById(@PathVariable("id") long id){
+        return accountService.getAccountById(id);
+    }
 
     /**
      * 去登录页
