@@ -29,10 +29,10 @@ spring:
           log-slow-sql: true
         wall:
           enabled: true
-  redis:
-    host: 101.34.157.30
-    port: 6379
-    password: 497625679
+#  redis:
+#    host: 101.34.157.30
+#    port: 6379
+#    password: +++++++
   #    url: redis://user:497625679@101.34.157.30:6379
   #mybatis:
   #configuration 与 config-location 不能同时存在
@@ -48,3 +48,16 @@ mybatis-plus:
   #  config-location: classpath:/mybatis/mybatis_config.xml
   configuration:
     map-underscore-to-camel-case: true
+
+# 指标监控
+# management.endpoints 是所有actuator的配置
+# management.endpoint.端点名.xxx 是对某个端点的具体配置
+management:
+  endpoints:
+    enabled-by-default: true #默认开启所有监控端点
+    web:
+      exposure:
+        include: '*' #以web方式，暴露所有的端点
+  endpoint:
+    health:
+      show-details: always
