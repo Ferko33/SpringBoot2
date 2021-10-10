@@ -29,7 +29,12 @@ spring:
           log-slow-sql: true
         wall:
           enabled: true
-#mybatis:
+  redis:
+    host: 101.34.157.30
+    port: 6379
+    password: 497625679
+  #    url: redis://user:497625679@101.34.157.30:6379
+  #mybatis:
   #configuration 与 config-location 不能同时存在
   # configuration 相当于修改 mybatis 全局配置文件中的值
   #config-location: classpath:/mybatis/mybatis_config.xml
@@ -40,7 +45,6 @@ spring:
 #  # 我们可以不写xml全局配置文件，直接使用 configuration：
 
 mybatis-plus:
-#  config-location: classpath:/mybatis/mybatis_config.xml
+  #  config-location: classpath:/mybatis/mybatis_config.xml
   configuration:
     map-underscore-to-camel-case: true
-

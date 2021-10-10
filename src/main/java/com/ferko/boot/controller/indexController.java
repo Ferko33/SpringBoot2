@@ -7,12 +7,16 @@ import com.ferko.boot.service.AccountService;
 import com.ferko.boot.service.CityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Slf4j
 @Controller
@@ -24,23 +28,26 @@ public class indexController {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @PostMapping("/addCity")
     @ResponseBody
-    public City addCity(City city){
+    public City addCity(City city) {
         cityService.addCity(city);
         return city;
     }
 
     @GetMapping("/city")
     @ResponseBody
-    public City getCityById(@RequestParam("cid") Long id){
-        log.info("id是：{}",id);
+    public City getCityById(@RequestParam("cid") Long id) {
+        log.info("id是：{}", id);
         return cityService.getCityById(id);
     }
 
     @GetMapping("/acct/{id}")
     @ResponseBody
-    public Account getById(@PathVariable("id") long id){
+    public Account getById(@PathVariable("id") long id) {
         return accountService.getAccountById(id);
     }
 
@@ -78,11 +85,17 @@ public class indexController {
      * @return
      */
     @GetMapping("/main.html")
-    public String mainPage(HttpSession session,Model model) {
+    public String mainPage(HttpSession session, Model model) {
+        HashOperations<String, String,String> operations = redisTemplate.opsForHash();
+        String s = operations.get("/main.html", new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString());
+        String s1 = operations.get("/basic_table", new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString());
+
+        model.addAttribute("mainCount",s);
+        model.addAttribute("basic_tableCount",s1);
         //判断是否登录， 理论上应该使用 拦截器、过滤器机制，这里先暂且略过
 //        Object loginUser = session.getAttribute("loginUser");
 //        if (loginUser != null){
-            return "main";
+        return "main";
 //        }
 //        model.addAttribute("erroMsg", "未登录，请重新登录");
 //        log.info("未登录，请重新登录");
